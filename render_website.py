@@ -1,8 +1,9 @@
 import json
 from jinja2 import Template
+from livereload import Server
 
 
-def main():
+def render_website():
     with open('books/meta_data.json', 'r', encoding='utf-8') as f:
         books_data = json.load(f)
 
@@ -29,6 +30,17 @@ def main():
 
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(rendered_html)
+
+
+def main():
+    render_website()
+
+    server = Server()
+
+    server.watch('templates/*.html', render_website)
+    server.watch('books/meta_data.json', render_website)
+
+    server.serve(root='.', port=5500, host='127.0.0.1')
 
 
 if __name__ == "__main__":
