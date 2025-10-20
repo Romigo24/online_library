@@ -3,7 +3,6 @@ import os
 from jinja2 import Template
 from livereload import Server
 from more_itertools import chunked
-from urllib.parse import quote
 
 
 def find_book_file(book_id, books_dir='books/books'):
@@ -27,24 +26,36 @@ def render_website():
         book_id = book_path.split('/')[-1].split('-')[0] if book_path else None
 
         real_book_path = find_book_file(book_id) if book_id else book_path
-        if real_book_path:
-            real_book_path = quote(real_book_path, safe='/')
 
         books.append({
             'title': book.get('title', 'Без названия'),
             'author': book.get('author', 'Неизвестный автор'),
             'genres': book.get('genres', ''),
-            'img_src': f"books/{book.get('img_src', 'img/nopic.gif')}",
+            'img_src': f"../books/{book.get('img_src', 'img/nopic.gif')}",
             'img_alt': f"Обложка книги '{book['title']}' - {book['author']}",
-            'book_path': real_book_path or book_path
+            'book_path': f"../{real_book_path}" if real_book_path else ""
         })
 
-    books_chunks = list(chunked(books, 2))
+    books_per_page = 20
+    books_pages = list(chunked(books, books_per_page))
 
-    rendered_html = template.render(books_chunks=books_chunks)
+    os.makedirs('pages', exist_ok=True)
+    for page_num, page_books in enumerate(books_pages, 1):
+        books_chunks = list(chunked(page_books, 2))
 
-    with open('index.html', 'w', encoding='utf-8') as f:
-        f.write(rendered_html)
+        rendered_html = template.render(
+            books_chunks=books_chunks,
+            current_page=page_num,
+            total_pages=len(books_pages)
+        )
+
+        if page_num == 1:
+            filename = 'index.html'
+        else:
+            filename = f'index{page_num}.html'
+
+        with open(f'pages/{filename}', 'w', encoding='utf-8') as f:
+            f.write(rendered_html)
 
 
 def main():
