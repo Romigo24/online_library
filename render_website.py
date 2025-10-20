@@ -1,6 +1,7 @@
 import json
 from jinja2 import Template
 from livereload import Server
+from more_itertools import chunked
 
 
 def render_website():
@@ -26,7 +27,9 @@ def render_website():
             'img_alt': img_alt
         })
 
-    rendered_html = template.render(books=books)
+    books_chunks = list(chunked(books, 2))
+
+    rendered_html = template.render(books_chunks=books_chunks)
 
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(rendered_html)
