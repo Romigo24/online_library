@@ -1,7 +1,15 @@
 import json
+import os
 from jinja2 import Template
 from livereload import Server
 from more_itertools import chunked
+from urllib.parse import quote
+
+
+def find_book_file(book_id, books_dir='books/books'):
+    for filename in os.listdir(books_dir):
+        if filename.startswith(f"{book_id}-") and filename.endswith('.txt'):
+            return f"books/books/{filename}"
 
 
 def render_website():
@@ -15,16 +23,20 @@ def render_website():
 
     books = []
     for book in books_data:
-        img_alt = f"Обложка книги '{book['title']}' - {book['author']}"
+        book_path = book.get('book_path', '')
+        book_id = book_path.split('/')[-1].split('-')[0] if book_path else None
 
-        img_src = f"books/{book.get('img_src', 'img/nopic.gif')}"
+        real_book_path = find_book_file(book_id) if book_id else book_path
+        if real_book_path:
+            real_book_path = quote(real_book_path, safe='/')
 
         books.append({
             'title': book.get('title', 'Без названия'),
             'author': book.get('author', 'Неизвестный автор'),
             'genres': book.get('genres', ''),
-            'img_src': img_src,
-            'img_alt': img_alt
+            'img_src': f"books/{book.get('img_src', 'img/nopic.gif')}",
+            'img_alt': f"Обложка книги '{book['title']}' - {book['author']}",
+            'book_path': real_book_path or book_path
         })
 
     books_chunks = list(chunked(books, 2))
