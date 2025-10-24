@@ -11,62 +11,64 @@
 
       <!-- Пагинатор -->
       {% if total_pages > 1 %}
-      <nav aria-label="Page navigation" class="mb-4">
-        <ul class="pagination justify-content-center">
-          <!-- Кнопка "Назад" -->
-          {% if current_page > 1 %}
-            <li class="page-item">
-              {% if current_page == 2 %}
-              <a class="page-link" href="index.html">
-                Назад
-              </a>
-              {% else %}
-              <a class="page-link" href="index{{ current_page - 1 }}.html">
-                Назад
-              </a>
-              {% endif %}
-            </li>
-          {% else %}
-            <li class="page-item disabled">
-              <span class="page-link">
-                Назад
-              </span>
-            </li>
-          {% endif %}
-
-          <!-- Номера страниц -->
-          {% for page in range(1, total_pages + 1) %}
-            {% if page == current_page %}
-              <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#">{{ page }} <span class="sr-only">(current)</span></a>
-              </li>
-            {% else %}
+      <div class="mb-5 mt-3">
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <!-- Кнопка "Назад" -->
+            {% if current_page > 1 %}
               <li class="page-item">
-                {% if page == 1 %}
-                <a class="page-link" href="index.html">{{ page }}</a>
+                {% if current_page == 2 %}
+                <a class="page-link" href="index.html">
+                  Назад
+                </a>
                 {% else %}
-                <a class="page-link" href="index{{ page }}.html">{{ page }}</a>
+                <a class="page-link" href="index{{ current_page - 1 }}.html">
+                  Назад
+                </a>
                 {% endif %}
               </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link">
+                  Назад
+                </span>
+              </li>
             {% endif %}
-          {% endfor %}
 
-          <!-- Кнопка "Вперед" -->
-          {% if current_page < total_pages %}
-            <li class="page-item">
-              <a class="page-link" href="index{{ current_page + 1 }}.html">
-                Вперед
-              </a>
-            </li>
-          {% else %}
-            <li class="page-item disabled">
-              <span class="page-link">
-                Вперед
-              </span>
-            </li>
-          {% endif %}
-        </ul>
-      </nav>
+            <!-- Номера страниц -->
+            {% for page in range(1, total_pages + 1) %}
+              {% if page == current_page %}
+                <li class="page-item active" aria-current="page">
+                  <a class="page-link" href="#">{{ page }} <span class="sr-only">(current)</span></a>
+                </li>
+              {% else %}
+                <li class="page-item">
+                  {% if page == 1 %}
+                  <a class="page-link" href="index.html">{{ page }}</a>
+                  {% else %}
+                  <a class="page-link" href="index{{ page }}.html">{{ page }}</a>
+                  {% endif %}
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            <!-- Кнопка "Вперед" -->
+            {% if current_page < total_pages %}
+              <li class="page-item">
+                <a class="page-link" href="index{{ current_page + 1 }}.html">
+                  Вперед
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link">
+                  Вперед
+                </span>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
       {% endif %}
 
       <!-- Книги -->
@@ -83,12 +85,26 @@
                 <div class="card-body">
                   <h5 class="card-title">{{ book.title }}</h5>
                   <p class="card-text">{{ book.author }}</p>
-                  <p class="card-text"><small class="text-muted">{{ book.genres }}</small></p>
-                  {% if book.book_path %}
+
+                  <!-- Жанры -->
+                  {% if book.genres %}
+                  <div class="mb-2">
+                    {% set genres_list = book.genres.split(',') %}
+                    {% for genre in genres_list[:3] %}
+                      {% set clean_genre = genre.strip() %}
+                      {% if clean_genre %}
+                      <span class="badge badge-secondary mr-1 mb-1">{{ clean_genre }}</span>
+                      {% endif %}
+                    {% endfor %}
+                    {% if genres_list|length > 3 %}
+                    <span class="badge badge-light">+{{ genres_list|length - 3 }}</span>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+
                   <a href="{{ book.book_path }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">
                     Читать
                   </a>
-                  {% endif %}
                 </div>
               </div>
             </div>
