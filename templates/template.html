@@ -1,16 +1,75 @@
 <!doctype html>
 <html lang="ru">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Библиотека книг Максима</title>
-
-    <!-- Bootstrap CSS -->
+    <title>Библиотека книг Максима - Страница {{ current_page }}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
-    <div class="container">
+    <div class="container mt-4">
+
+      <!-- Пагинатор -->
+      {% if total_pages > 1 %}
+      <nav aria-label="Page navigation" class="mb-4">
+        <ul class="pagination justify-content-center">
+          <!-- Кнопка "Назад" -->
+          {% if current_page > 1 %}
+            <li class="page-item">
+              {% if current_page == 2 %}
+              <a class="page-link" href="index.html">
+                Назад
+              </a>
+              {% else %}
+              <a class="page-link" href="index{{ current_page - 1 }}.html">
+                Назад
+              </a>
+              {% endif %}
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">
+                Назад
+              </span>
+            </li>
+          {% endif %}
+
+          <!-- Номера страниц -->
+          {% for page in range(1, total_pages + 1) %}
+            {% if page == current_page %}
+              <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">{{ page }} <span class="sr-only">(current)</span></a>
+              </li>
+            {% else %}
+              <li class="page-item">
+                {% if page == 1 %}
+                <a class="page-link" href="index.html">{{ page }}</a>
+                {% else %}
+                <a class="page-link" href="index{{ page }}.html">{{ page }}</a>
+                {% endif %}
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          <!-- Кнопка "Вперед" -->
+          {% if current_page < total_pages %}
+            <li class="page-item">
+              <a class="page-link" href="index{{ current_page + 1 }}.html">
+                Вперед
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">
+                Вперед
+              </span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+
+      <!-- Книги -->
       <div class="row">
         {% for column in books_chunks %}
         <div class="col-6">
@@ -26,10 +85,10 @@
                   <p class="card-text">{{ book.author }}</p>
                   <p class="card-text"><small class="text-muted">{{ book.genres }}</small></p>
                   {% if book.book_path %}
-                  <a href="{{ book.book_path}}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">
+                  <a href="{{ book.book_path }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">
                     Читать
-                </a>
-                {% endif %}
+                  </a>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -38,10 +97,10 @@
         </div>
         {% endfor %}
       </div>
+
     </div>
 
     <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

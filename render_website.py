@@ -3,6 +3,7 @@ import os
 from jinja2 import Template
 from livereload import Server
 from more_itertools import chunked
+from urllib.parse import quote
 
 
 def find_book_file(book_id, books_dir='books/books'):
@@ -27,13 +28,25 @@ def render_website():
 
         real_book_path = find_book_file(book_id) if book_id else book_path
 
+        if real_book_path:
+            path_parts = real_book_path.split('/')
+            encoded_parts = []
+            for part in path_parts:
+                if '.' in part:
+                    encoded_parts.append(quote(part))
+                else:
+                    encoded_parts.append(part)
+            encoded_book_path = '/'.join(encoded_parts)
+        else:
+            encoded_book_path = ""
+
         books.append({
             'title': book.get('title', 'Без названия'),
             'author': book.get('author', 'Неизвестный автор'),
             'genres': book.get('genres', ''),
             'img_src': f"../books/{book.get('img_src', 'img/nopic.gif')}",
             'img_alt': f"Обложка книги '{book['title']}' - {book['author']}",
-            'book_path': f"../{real_book_path}" if real_book_path else ""
+            'book_path': f"../{encoded_book_path}" if encoded_book_path else ""
         })
 
     books_per_page = 20
