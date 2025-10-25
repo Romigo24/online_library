@@ -39,7 +39,7 @@ git clone https://github.com/romigo24/online-library.git
 
 2. Установите зависимости:
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 3. Запустите генерацию сайта:
