@@ -19,13 +19,13 @@
             {% if current_page > 1 %}
               <li class="page-item">
                 {% if current_page == 2 %}
-                <a class="page-link" href="index.html">
-                  Назад
-                </a>
+                  <a class="page-link" href="index.html">
+                    Назад
+                  </a>
                 {% else %}
-                <a class="page-link" href="index{{ current_page - 1 }}.html">
-                  Назад
-                </a>
+                  <a class="page-link" href="index{{ current_page - 1 }}.html">
+                    Назад
+                  </a>
                 {% endif %}
               </li>
             {% else %}
@@ -45,9 +45,9 @@
               {% else %}
                 <li class="page-item">
                   {% if page == 1 %}
-                  <a class="page-link" href="index.html">{{ page }}</a>
+                    <a class="page-link" href="index.html">{{ page }}</a>
                   {% else %}
-                  <a class="page-link" href="index{{ page }}.html">{{ page }}</a>
+                    <a class="page-link" href="index{{ page }}.html">{{ page }}</a>
                   {% endif %}
                 </li>
               {% endif %}
@@ -75,43 +75,43 @@
       <!-- Книги -->
       <div class="row">
         {% for column in books_chunks %}
-        <div class="col-6">
-          {% for book in column %}
-          <div class="card mb-3" style="max-width: 540px;">
-            <div class="row no-gutters">
-              <div class="col-md-4">
-                <img src="{{ book.img_src }}" class="card-img" alt="{{ book.img_alt }}">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">{{ book.title }}</h5>
-                  <p class="card-text">{{ book.author }}</p>
-                  
-                  <!-- Жанры в виде бейджиков -->
-                  {% if book.genres %}
-                  <div class="mb-2">
-                    {% set genres_list = book.genres.split(',') %}
-                    {% for genre in genres_list[:3] %}  <!-- Показываем первые 3 жанра -->
-                      {% set clean_genre = genre.strip() %}
-                      {% if clean_genre %}
-                      <span class="badge badge-secondary mr-1 mb-1">{{ clean_genre }}</span>
-                      {% endif %}
-                    {% endfor %}
-                    {% if genres_list|length > 3 %}
-                    <span class="badge badge-light">+{{ genres_list|length - 3 }}</span>
-                    {% endif %}
+          <div class="col-6">
+            {% for book in column %}
+              <div class="card mb-3" style="max-width: 540px;">
+                <div class="row no-gutters">
+                  <div class="col-md-4">
+                    <img src="{{ book.img_src }}" class="card-img" alt="{{ book.img_alt }}">
                   </div>
-                  {% endif %}
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ book.title }}</h5>
+                      <p class="card-text">{{ book.author }}</p>
 
-                  <a href="{{ book.book_path }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">
-                    Читать
-                  </a>
+                      <!-- Жанры в виде бейджиков -->
+                      {% if book.genres %}
+                        <div class="mb-2">
+                          {% set genres_list = book.genres.split(',') %}
+                          {% for genre in genres_list[:3] %}  <!-- Показываем первые 3 жанра -->
+                            {% set clean_genre = genre.strip() %}
+                            {% if clean_genre %}
+                              <span class="badge badge-secondary mr-1 mb-1">{{ clean_genre }}</span>
+                            {% endif %}
+                          {% endfor %}
+                          {% if genres_list|length > 3 %}
+                            <span class="badge badge-light">+{{ genres_list|length - 3 }}</span>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+
+                      <a href="{{ book.book_path }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">
+                        Читать
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
-        </div>
         {% endfor %}
       </div>
 
