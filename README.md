@@ -39,7 +39,7 @@ git clone https://github.com/romigo24/online-library.git
 
 2. Установите зависимости:
 ```bash
-pip install -r requirements.txt
+pip install requirements.txt
 ```
 
 3. Запустите генерацию сайта:
@@ -47,9 +47,37 @@ pip install -r requirements.txt
 python render_website.py
 ```
 
-4. Откройте в браузере сгенерированные страницы в папке `pages/`
+4. Откройте в браузере http://127.0.0.1:5500/pages/index.html
 
+## ⚙️ Настройки запуска
 
+Программа поддерживает гибкую настройку через аргументы командной строки и переменные окружения.
+
+### Аргументы командной строки
+
+```bash
+python render_website.py --data-path meta_data.json --template-path templates/template.html --output-dir pages --books-dir media/books --books-per-page 20
+```
+
+### Переменные окружения
+
+```bash
+export LIBRARY_DATA_PATH="meta_data.json"
+export LIBRARY_TEMPLATE_PATH="templates/template.html"
+export LIBRARY_OUTPUT_DIR="pages"
+export LIBRARY_BOOKS_DIR="media/books"
+export LIBRARY_BOOKS_PER_PAGE="20"
+python render_website.py
+```
+
+### Параметры настройки
+```
+--data-path / LIBRARY_DATA_PATH - путь к файлу с метаданными книг (по умолчанию: meta_data.json)
+--template-path / LIBRARY_TEMPLATE_PATH - путь к HTML шаблону (по умолчанию: templates/template.html)
+--output-dir / LIBRARY_OUTPUT_DIR - папка для сгенерированных страниц (по умолчанию: pages)
+--books-dir / LIBRARY_BOOKS_DIR - папка с текстами книг (по умолчанию: media/books)
+--books-per-page / LIBRARY_BOOKS_PER_PAGE - количество книг на странице (по умолчанию: 20)
+```
 ## 📊 Функциональность
 
 ### Генерация сайта
